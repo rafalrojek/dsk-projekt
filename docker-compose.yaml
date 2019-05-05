@@ -1,0 +1,33 @@
+version: "2.1"
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Alamako%%1
+      - MSSQL_PID=Developer
+    ports:
+      - 1433:1433
+  oracle:
+    image: oracle/database:11.2.0.2-xe
+    environment:
+      - ORACLE_PWD=alamakota123
+    ports:
+      - 1521:1521
+      - 5500:5500
+    volumes:
+      - ~/oracle:/opt/oracle/oradata
+      - /dev/shm:/dev/shm
+    mem_limit: 3G
+  mysql:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=my-secret-pw
+      - MYSQL_USER=ala
+      - MYSQL_DATABASE=dsk
+      - MYSQL_PASSWORD=makota
+    ports:
+      - 5432:5432
+
+
+
