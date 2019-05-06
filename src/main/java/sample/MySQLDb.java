@@ -5,7 +5,7 @@ import java.util.LinkedList;
 public class MySQLDb extends Database {
     private static MySQLDb instance;
 
-    public static MySQLDb get() {
+    static MySQLDb get() {
         if (instance == null) instance = new MySQLDb();
         return instance;
     }

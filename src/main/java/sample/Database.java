@@ -8,14 +8,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public abstract class Database {
+abstract class Database {
 
     boolean isRunning;
     String dockerID;
     String query;
     int numberOfThreads;
     LinkedList<Thread> threadLinkedList;
-    LinkedList<Double> times = new LinkedList<>();
+    private LinkedList<Double> times = new LinkedList<>();
 
     String getDockerId(String dbName) {
         String s, result = null;
@@ -69,7 +69,7 @@ public abstract class Database {
         }
     }
 
-    boolean startstopDB() {
+    boolean startStopDB() {
         String command = "docker ";
         if (isRunning) command += "stop " + dockerID;
         else command+= "start " + dockerID;
@@ -82,17 +82,15 @@ public abstract class Database {
         return isRunning;
     }
 
-    public void setquery (String query) { this.query = query; }
+    void setQuery(String query) { this.query = query; }
 
-    public String getQuery () {return this.query;}
-
-    public String getTimes() {
+    String getTimes() {
         StringBuilder sb = new StringBuilder();
         for (Double t : times) sb.append(String.format("%.12f",t)).append(" ");
         return sb.toString();
     }
 
-    public String getAvg () {
+    String getAvg() {
         Double max = 0.0;
         for (Double t: times) if (t > max) max = t;
 
@@ -103,7 +101,7 @@ public abstract class Database {
         for (Double t: times) avg+=t;
         avg/=times.size();
 
-        Double variance = 0.0;
+        double variance = 0.0;
         for (Double t: times) variance += (t - avg) * (t- avg);
         variance/= times.size();
         return "Minimum: " + String.format("%.12f",min) + " Maksimum: " + String.format("%.12f",max) +

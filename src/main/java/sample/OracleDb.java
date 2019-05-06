@@ -36,10 +36,10 @@ public class OracleDb extends Database {
 
     @Override
     public void createThreads() {
-        String tmpfile = whenWriteToTmpFile();
+        String tmpFile = whenWriteToTmpFile();
         threadLinkedList = new LinkedList<>();
         for (int i =0; i < numberOfThreads; i++) {
-            threadLinkedList.add(new Thread(new OracleThread(tmpfile, this)));
+            threadLinkedList.add(new Thread(new OracleThread(tmpFile, this)));
         }
     }
 }

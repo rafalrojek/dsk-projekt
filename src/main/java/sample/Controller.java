@@ -27,7 +27,7 @@ public class Controller {
 
     private static Stage _stage;
 
-    public static void setStage(Stage stage) { _stage = stage;}
+    static void setStage(Stage stage) { _stage = stage;}
 
     public void OracleClicked() {
         disableOtherButtons(oracleButton);
@@ -49,19 +49,19 @@ public class Controller {
 
     public void MySQLButtonClicked() {
         MySQLDb db = MySQLDb.get();
-        if (db.startstopDB()) mysqlStartButton.setText("Wyłącz");
+        if (db.startStopDB()) mysqlStartButton.setText("Wyłącz");
         else mysqlStartButton.setText("Włącz");
     }
 
     public void MsSQLButtonClicked() {
         MsSQLDb db = MsSQLDb.get();
-        if (db.startstopDB())  mssqlStartButton.setText("Wyłącz");
+        if (db.startStopDB())  mssqlStartButton.setText("Wyłącz");
         else mssqlStartButton.setText("Włącz");
     }
 
     public void OracleButtonClicked() {
         OracleDb db = OracleDb.get();
-        if (db.startstopDB())  OracleStartButton.setText("Wyłącz");
+        if (db.startStopDB())  OracleStartButton.setText("Wyłącz");
         else OracleStartButton.setText("Włącz");
     }
 
@@ -96,7 +96,7 @@ public class Controller {
         else if (mssqlButton.isSelected()) database = MsSQLDb.get();
         else return;
 
-        database.setquery(scriptArea.getText());
+        database.setQuery(scriptArea.getText());
         database.setNumberOfThreads((int) userSlider.getValue());
         database.createThreads();
         database.runThreads();

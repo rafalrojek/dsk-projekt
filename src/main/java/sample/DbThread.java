@@ -1,6 +1,6 @@
 package sample;
 
-public abstract class DbThread implements Runnable {
+abstract class DbThread implements Runnable {
     String[] command;
     Database database;
 

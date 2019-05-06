@@ -5,7 +5,7 @@ import java.util.LinkedList;
 public class MsSQLDb  extends Database {
     private static MsSQLDb instance;
 
-    public static MsSQLDb get() {
+    static MsSQLDb get() {
         if (instance == null) instance = new MsSQLDb();
         return instance;
     }
