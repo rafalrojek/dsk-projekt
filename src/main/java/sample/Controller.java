@@ -5,6 +5,10 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+import java.io.*;
 
 public class Controller {
     public GridPane grid;
@@ -20,6 +24,10 @@ public class Controller {
     public Button OracleStartButton;
     public Button mssqlStartButton;
     public Button mysqlStartButton;
+
+    private static Stage _stage;
+
+    public static void setStage(Stage stage) { _stage = stage;}
 
     public void OracleClicked() {
         disableOtherButtons(oracleButton);
@@ -58,6 +66,25 @@ public class Controller {
     }
 
     public void LoadButtonClicked() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Wybierz plik do otwarcia");
+        File file = fileChooser.showOpenDialog(_stage);
+        if (file != null) {
+            try {
+                BufferedReader buf = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+                String line = buf.readLine();
+                StringBuilder sb = new StringBuilder();
+
+                while(line != null){
+                    sb.append(line).append("\n");
+                    line = buf.readLine();
+                }
+
+                scriptArea.setText(sb.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 
