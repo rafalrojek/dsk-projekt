@@ -21,6 +21,7 @@ services:
     mem_limit: 3G
   mysql:
     image: mysql
+    command: --lower_case_table_names=1
     environment:
       - MYSQL_ROOT_PASSWORD=my-secret-pw
       - MYSQL_USER=ala
@@ -28,6 +29,7 @@ services:
       - MYSQL_PASSWORD=makota
     ports:
       - 5432:5432
+      - 3306:3306
 
 
 

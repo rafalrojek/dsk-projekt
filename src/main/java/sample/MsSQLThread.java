@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 public class MsSQLThread  extends DbThread {
 
     MsSQLThread(String dockerID, String command, Database database) {
-        String CLI = " /opt/mssql-tools/bin/sqlcmd -U sa -P 'Alamako%%1' -Q \"set statistics time on; ";
+        String CLI = " /opt/mssql-tools/bin/sqlcmd -U sa -P 'Alamako%%1' -Q \"use tst; set statistics time on; ";
         String linux = "docker exec " + dockerID + CLI + command + "\"";
         this.command = new String[] {"bash", "-c", linux};
         this.database = database;
@@ -23,12 +23,13 @@ public class MsSQLThread  extends DbThread {
                 try {
                     if (line.contains("elapsed time = ")) {
                         System.out.println(line);
-                        String[] l = line.split("elapsed time = ");
-                        database.addTime(Double.parseDouble(l[1].replace(" ms.", "")));
+                        String[] l = line.split(" ms,");
+                        database.addTime(Double.parseDouble(l[0].replace("CPU time = ", "").trim()));
                     }
                 } catch (NumberFormatException ignored) { }
             }
-
+            BufferedReader error = new BufferedReader(new InputStreamReader(os.getErrorStream()));
+            while ((line = error.readLine()) != null) System.out.println(line);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -7,6 +7,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import sample.experiment.ExperimentPlanner;
 
 import java.io.*;
 
@@ -26,6 +27,7 @@ public class Controller {
     public Button mysqlStartButton;
 
     private static Stage _stage;
+    public Slider loopSlider;
 
     static void setStage(Stage stage) { _stage = stage;}
 
@@ -89,6 +91,7 @@ public class Controller {
     }
 
     public void startButtonClicked() {
+        /*
         System.out.println((int) userSlider.getValue());
         Database database;
         if (oracleButton.isSelected())  database = OracleDb.get();
@@ -96,12 +99,26 @@ public class Controller {
         else if (mssqlButton.isSelected()) database = MsSQLDb.get();
         else return;
 
-        database.setQuery(scriptArea.getText());
-        database.setNumberOfThreads((int) userSlider.getValue());
-        database.createThreads();
-        database.runThreads();
+        StringBuilder logs = new StringBuilder();
+        StringBuilder result = new StringBuilder();
 
-        logsArea.setText(database.getTimes());
-        resultArea.setText(database.getAvg());
+        for (int i = 0 ; i < loopSlider.getValue(); i++) {
+            database.setQuery(scriptArea.getText());
+            database.setNumberOfThreads((int) userSlider.getValue());
+            database.createThreads();
+            database.runThreads();
+
+            logs.append("Proba ").append(i).append(": ").append(database.getTimes()).append("\n");
+            result.append("Proba ").append(i).append(": ").append(database.getAvg());
+            database.cleanTimes();
+            System.out.println("Iteracja: " + i);
+        }
+        result.append("Wynik końcowy: ");
+        result.append(database.getAllAvg());
+        logsArea.setText(logs.toString());
+        resultArea.setText(result.toString());
+        */
+        ExperimentPlanner experimentPlanner = new ExperimentPlanner();
+        experimentPlanner.executeExperiments();
     }
 }

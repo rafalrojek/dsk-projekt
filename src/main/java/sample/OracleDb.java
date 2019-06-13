@@ -1,5 +1,7 @@
 package sample;
 
+import sample.experiment.ExperimentPlanner;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -9,7 +11,7 @@ public class OracleDb extends Database {
 
     private static OracleDb instance;
 
-    static OracleDb get() {
+    public static OracleDb get() {
         if (instance == null) instance = new OracleDb();
         return instance;
     }
@@ -41,5 +43,10 @@ public class OracleDb extends Database {
         for (int i =0; i < numberOfThreads; i++) {
             threadLinkedList.add(new Thread(new OracleThread(tmpFile, this)));
         }
+    }
+
+    @Override
+    public String getName() {
+        return ExperimentPlanner.ORACLE;
     }
 }

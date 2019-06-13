@@ -8,7 +8,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-abstract class Database {
+public abstract class Database {
 
     boolean isRunning;
     String dockerID;
@@ -16,6 +16,8 @@ abstract class Database {
     int numberOfThreads;
     LinkedList<Thread> threadLinkedList;
     private LinkedList<Double> times = new LinkedList<>();
+    private LinkedList<Double> alltimes = new LinkedList<>();
+
 
     String getDockerId(String dbName) {
         String s, result = null;
@@ -35,7 +37,7 @@ abstract class Database {
     }
 
     synchronized void addTime (double time) { times.add(time);}
-    void setNumberOfThreads (int i) {numberOfThreads = i; }
+    public void setNumberOfThreads(int i) {numberOfThreads = i; }
 
     boolean getState(String dbName) {
         String s;
@@ -56,7 +58,7 @@ abstract class Database {
 
     public abstract void createThreads ();
 
-    void runThreads() {
+    public void runThreads() {
         ExecutorService threads = Executors.newCachedThreadPool();
         for (Thread t: threadLinkedList) {
             threads.execute(t);
@@ -82,30 +84,45 @@ abstract class Database {
         return isRunning;
     }
 
-    void setQuery(String query) { this.query = query; }
+    public void setQuery(String query) { this.query = query; }
 
     String getTimes() {
         StringBuilder sb = new StringBuilder();
-        for (Double t : times) sb.append(String.format("%.12f",t)).append(" ");
+        for (Double t : times) sb.append(String.format("%.8f",t)).append(" ");
         return sb.toString();
     }
 
     String getAvg() {
+        return getString(times);
+    }
+
+    public String getAllAvg() {
+        return getString(alltimes);
+    }
+
+    private String getString(LinkedList<Double> alltimes) {
         Double max = 0.0;
-        for (Double t: times) if (t > max) max = t;
+        for (Double t: alltimes) if (t > max) max = t;
 
         Double min = Double.MAX_VALUE;
-        for (Double t: times) if (t < min) min = t;
+        for (Double t: alltimes) if (t < min) min = t;
 
         Double avg = 0.0;
-        for (Double t: times) avg+=t;
-        avg/=times.size();
+        for (Double t: alltimes) avg+=t;
+        avg/= alltimes.size();
 
         double variance = 0.0;
-        for (Double t: times) variance += (t - avg) * (t- avg);
-        variance/= times.size();
-        return "Minimum: " + String.format("%.12f",min) + " Maksimum: " + String.format("%.12f",max) +
-                " Średnia: " + String.format("%.12f",avg) + "Wariancja:" + String.format("%.12f", variance)
-                + "Odchylenie standardowe:" + String.format("%.12f", Math.sqrt(variance));
+        for (Double t: alltimes) variance += (t - avg) * (t- avg);
+        variance/= alltimes.size();
+        return "Min: " + String.format("%.6f",min) + " Max: " + String.format("%.6f",max) +
+                " Śr: " + String.format("%.6f",avg) + " War:" + String.format("%.6f", variance)
+                + " Odch:" + String.format("%.6f", Math.sqrt(variance)) + "\n";
     }
+
+    public void cleanTimes() {
+        alltimes.addAll(times);
+        times = new LinkedList<>();
+    }
+
+    public abstract String getName();
 }

@@ -1,11 +1,13 @@
 package sample;
 
+import sample.experiment.ExperimentPlanner;
+
 import java.util.LinkedList;
 
 public class MySQLDb extends Database {
     private static MySQLDb instance;
 
-    static MySQLDb get() {
+    public static MySQLDb get() {
         if (instance == null) instance = new MySQLDb();
         return instance;
     }
@@ -21,5 +23,10 @@ public class MySQLDb extends Database {
         for (int i =0; i < numberOfThreads; i++) {
             threadLinkedList.add(new Thread(new MySQLThread(dockerID, query, this)));
         }
+    }
+
+    @Override
+    public String getName() {
+        return ExperimentPlanner.MySQL;
     }
 }

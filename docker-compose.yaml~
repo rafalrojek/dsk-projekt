@@ -4,7 +4,7 @@ services:
     image: mcr.microsoft.com/mssql/server
     environment:
       - ACCEPT_EULA=Y
-      - SA_PASSWORD=yourStrong(!)Password
+      - SA_PASSWORD=Alamako%%1
       - MSSQL_PID=Developer
     ports:
       - 1433:1433
@@ -17,9 +17,11 @@ services:
       - 5500:5500
     volumes:
       - ~/oracle:/opt/oracle/oradata
+      - /dev/shm:/dev/shm
     mem_limit: 3G
   mysql:
     image: mysql
+    command: --lower_case_table_names=1
     environment:
       - MYSQL_ROOT_PASSWORD=my-secret-pw
       - MYSQL_USER=ala
@@ -27,6 +29,7 @@ services:
       - MYSQL_PASSWORD=makota
     ports:
       - 5432:5432
+      - 3306:3306
 
 
 

@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 
 public class OracleThread extends DbThread {
     OracleThread (String tmpFile, Database database) {
-        String CLI = "echo exit | sqlplus64 system/alamakota123@//localhost:1521/XE @" + tmpFile;
+        String CLI = "echo exit | sqlplus64 HR/password@//localhost:1521/XE @" + tmpFile;
         this.command = new String[] { "bash", "-c", CLI};
         this.database = database;
     }
@@ -20,6 +20,7 @@ public class OracleThread extends DbThread {
             while ((line = input.readLine()) != null) {
                 try {
                     if (line.contains("Elapsed: ")) {
+                        System.out.println(line);
                         line = line.replace("Elapsed: ", "");
                         int hours = Integer.parseInt(line.substring(0,2));
                         int minutes = Integer.parseInt(line.substring(3,5));
@@ -30,7 +31,8 @@ public class OracleThread extends DbThread {
                     }
                 } catch (NumberFormatException ignored) { }
             }
-
+            BufferedReader error = new BufferedReader(new InputStreamReader(os.getErrorStream()));
+            while ((line = error.readLine()) != null) System.out.println(line);
         } catch (IOException e) {
             e.printStackTrace();
         }
