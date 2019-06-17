@@ -20,6 +20,7 @@ public class MsSQLThread  extends DbThread {
             Process os = Runtime.getRuntime().exec(command);
             BufferedReader input = new BufferedReader(new InputStreamReader(os.getInputStream()));
             while ((line = input.readLine()) != null) {
+                System.out.println(line);
                 try {
                     if (line.contains("elapsed time = ")) {
                         System.out.println(line);
